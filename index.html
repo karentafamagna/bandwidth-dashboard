@@ -1,859 +1,690 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Team Bandwidth Dashboard</title>
-<style>
-  /* ============================================================
-     RESET & BASE
-     ============================================================ */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: #f0f2f5;
-    color: #1a1a2e;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-  button { cursor: pointer; font-family: inherit; }
-  input, select { font-family: inherit; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>team bandwidth dashboard</title>
+  <style>
+    /* ============================================================
+       reset & base
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, blinkmacsystemfont, 'segoe ui', roboto, oxygen, ubuntu, sans-serif;
+      background: #f0f2f5; color: #1a1a2e; line-height: 1.5; min-height: 100vh;
+    }
+    button { cursor: pointer; font-family: inherit; }
+    input, select { font-family: inherit; }
 
-  /* ============================================================
-     HEADER
-     ============================================================ */
-  .header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    color: #fff;
-    padding: 28px 32px 20px;
-    border-bottom: 3px solid #0f3460;
-  }
-  .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
-  .header .subtitle { font-size: 0.85rem; color: #a8b2d1; }
+    /* ============================================================
+       header
+       ============================================================ */
+    .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff; padding: 28px 32px 20px; border-bottom: 3px solid #0f3460;
+    }
+    .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+    .header .subtitle { font-size: 0.85rem; color: #a8b2d1; }
 
-  /* ============================================================
-     FILTERS BAR
-     ============================================================ */
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    padding: 16px 32px;
-    background: #fff;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .filters select, .filters input[type="text"], .filters input[type="number"], .filters input[type="file"] {
-    padding: 7px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    background: #fff;
-    color: #333;
-  }
-  .filters select { min-width: 140px; }
-  .filters input[type="text"] { min-width: 200px; }
-  .filters input[type="number"] { width: 80px; }
-  .filters label { font-size: 0.8rem; color: #555; font-weight: 600; }
-  .filter-group { display: flex; flex-direction: column; gap: 3px; }
+    /* ============================================================
+       filters bar
+       ============================================================ */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      padding: 16px 32px; background: #fff; border-bottom: 1px solid #e0e0e0;
+    }
+    .filters select, .filters input[type="text"], .filters input[type="number"], .filters input[type="file"] {
+      padding: 7px 12px; border: 1px solid #ccc; border-radius: 6px;
+      font-size: 0.85rem; background: #fff; color: #333;
+    }
+    .filters select { min-width: 140px; }
+    .filters input[type="text"] { min-width: 200px; }
+    .filters input[type="number"] { width: 80px; }
+    .filters label { font-size: 0.8rem; color: #555; font-weight: 600; }
+    .filter-group { display: flex; flex-direction: column; gap: 3px; }
 
-  /* ============================================================
-     ACTION BUTTONS
-     ============================================================ */
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 12px 32px;
-    background: #fafbfc;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .btn {
-    padding: 7px 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    background: #fff;
-    color: #333;
-    transition: all 0.15s;
-  }
-  .btn:hover { background: #f0f0f0; border-color: #999; }
-  .btn-primary { background: #0f3460; color: #fff; border-color: #0f3460; }
-  .btn-primary:hover { background: #1a4a7a; }
-  .btn-danger { background: #e74c3c; color: #fff; border-color: #e74c3c; }
-  .btn-danger:hover { background: #c0392b; }
-  .btn-success { background: #27ae60; color: #fff; border-color: #27ae60; }
-  .btn-success:hover { background: #219a52; }
+    /* ============================================================
+       action buttons
+       ============================================================ */
+    .actions {
+      display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 32px;
+      background: #fafbfc; border-bottom: 1px solid #e0e0e0;
+    }
+    .btn {
+      padding: 7px 16px; border: 1px solid #ccc; border-radius: 6px;
+      font-size: 0.8rem; font-weight: 600; background: #fff; color: #333; transition: all 0.15s;
+    }
+    .btn:hover { background: #f0f0f0; border-color: #999; }
+    .btn-primary { background: #0f3460; color: #fff; border-color: #0f3460; }
+    .btn-primary:hover { background: #1a4a7a; }
+    .btn-danger { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+    .btn-danger:hover { background: #c0392b; }
+    .btn-success { background: #27ae60; color: #fff; border-color: #27ae60; }
+    .btn-success:hover { background: #219a52; }
 
-  /* ============================================================
-     STATS CARDS
-     ============================================================ */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    padding: 20px 32px;
-  }
-  .stat-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 18px 20px;
-    border: 1px solid #e8e8e8;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .stat-card .label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-  .stat-card .value { font-size: 1.6rem; font-weight: 700; color: #1a1a2e; margin: 4px 0; }
-  .stat-card .detail { font-size: 0.75rem; color: #999; }
+    /* ============================================================
+       stats cards
+       ============================================================ */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; padding: 20px 32px;
+    }
+    .stat-card {
+      background: #fff; border-radius: 10px; padding: 18px 20px;
+      border: 1px solid #e8e8e8; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .stat-card .label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+    .stat-card .value { font-size: 1.6rem; font-weight: 700; color: #1a1a2e; margin: 4px 0; }
+    .stat-card .detail { font-size: 0.75rem; color: #999; }
 
-  /* ============================================================
-     TEAM LOAD OVERVIEW
-     ============================================================ */
-  .section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 16px 32px 8px;
-    color: #1a1a2e;
-  }
-  .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
-    padding: 8px 32px 20px;
-  }
-  .team-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 16px 18px;
-    border: 1px solid #e8e8e8;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    position: relative;
-    overflow: hidden;
-  }
-  .team-card .name { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
-  .team-card .hours-label { font-size: 0.85rem; color: #555; margin-bottom: 8px; }
-  .team-card .bar-bg {
-    height: 8px;
-    background: #eee;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 8px;
-  }
-  .team-card .bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.4s ease;
-  }
-  .team-card .meta { font-size: 0.75rem; color: #999; }
-  .load-light .bar-fill { background: #27ae60; }
-  .load-moderate .bar-fill { background: #f39c12; }
-  .load-heavy .bar-fill { background: #e74c3c; }
-  .load-light .load-badge { color: #27ae60; }
-  .load-moderate .load-badge { color: #f39c12; }
-  .load-heavy .load-badge { color: #e74c3c; }
-  .load-badge { font-weight: 700; font-size: 0.75rem; }
+    /* ============================================================
+       team load overview
+       ============================================================ */
+    .section-title { font-size: 1rem; font-weight: 700; padding: 16px 32px 8px; color: #1a1a2e; }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px; padding: 8px 32px 20px;
+    }
+    .team-card {
+      background: #fff; border-radius: 10px; padding: 16px 18px;
+      border: 1px solid #e8e8e8; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      position: relative; overflow: hidden;
+    }
+    .team-card .name { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+    .team-card .hours-label { font-size: 0.85rem; color: #555; margin-bottom: 8px; }
+    .team-card .bar-bg { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+    .team-card .bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+    .team-card .meta { font-size: 0.75rem; color: #999; }
+    .load-light .bar-fill { background: #27ae60; }
+    .load-moderate .bar-fill { background: #f39c12; }
+    .load-heavy .bar-fill { background: #e74c3c; }
+    .load-light .load-badge { color: #27ae60; }
+    .load-moderate .load-badge { color: #f39c12; }
+    .load-heavy .load-badge { color: #e74c3c; }
+    .load-badge { font-weight: 700; font-size: 0.75rem; }
 
-  /* ============================================================
-     WEEKLY SECTIONS
-     ============================================================ */
-  .weeks-container { padding: 0 32px 32px; }
-  .week-block {
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid #e8e8e8;
-    margin-bottom: 14px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .week-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 20px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.15s;
-  }
-  .week-header:hover { background: #f8f9fa; }
-  .week-header .left { display: flex; align-items: center; gap: 12px; }
-  .week-header .chevron { transition: transform 0.2s; font-size: 0.9rem; color: #999; }
-  .week-header .chevron.open { transform: rotate(90deg); }
-  .week-header .week-range { font-weight: 700; font-size: 0.9rem; }
-  .week-header .month-label { font-size: 0.8rem; color: #888; }
-  .week-header .right { display: flex; align-items: center; gap: 16px; }
-  .week-header .hours-pill {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-  .pill-light { background: #e8f8ef; color: #27ae60; }
-  .pill-moderate { background: #fef5e7; color: #f39c12; }
-  .pill-heavy { background: #fde8e8; color: #e74c3c; }
-  .week-header .week-meta { font-size: 0.75rem; color: #999; }
-  .week-body { border-top: 1px solid #eee; padding: 0; display: none; }
-  .week-body.open { display: block; }
-  .week-body table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-  .week-body th {
-    text-align: left;
-    padding: 10px 16px;
-    background: #f8f9fa;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: #888;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid #eee;
-  }
-  .week-body td {
-    padding: 9px 16px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #444;
-  }
-  .week-body tr:last-child td { border-bottom: none; }
-  .week-body tr:hover td { background: #f8f9fa; }
-  .week-toolbar {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    padding: 10px 16px;
-    background: #fafbfc;
-    border-top: 1px solid #eee;
-  }
+    /* ============================================================
+       weekly sections
+       ============================================================ */
+    .weeks-container { padding: 0 32px 32px; }
+    .week-block {
+      background: #fff; border-radius: 10px; border: 1px solid #e8e8e8;
+      margin-bottom: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .week-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; cursor: pointer; user-select: none; transition: background 0.15s;
+    }
+    .week-header:hover { background: #f8f9fa; }
+    .week-header .left { display: flex; align-items: center; gap: 12px; }
+    .week-header .chevron { transition: transform 0.2s; font-size: 0.9rem; color: #999; }
+    .week-header .chevron.open { transform: rotate(90deg); }
+    .week-header .week-range { font-weight: 700; font-size: 0.9rem; }
+    .week-header .month-label { font-size: 0.8rem; color: #888; }
+    .week-header .right { display: flex; align-items: center; gap: 16px; }
+    .week-header .hours-pill { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+    .pill-light { background: #e8f8ef; color: #27ae60; }
+    .pill-moderate { background: #fef5e7; color: #f39c12; }
+    .pill-heavy { background: #fde8e8; color: #e74c3c; }
+    .week-header .week-meta { font-size: 0.75rem; color: #999; }
+    .week-body { border-top: 1px solid #eee; padding: 0; display: none; }
+    .week-body.open { display: block; }
+    .week-body table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .week-body th {
+      text-align: left; padding: 10px 16px; background: #f8f9fa; font-weight: 600;
+      font-size: 0.75rem; text-transform: uppercase; color: #888; letter-spacing: 0.5px;
+      border-bottom: 1px solid #eee;
+    }
+    .week-body td { padding: 9px 16px; border-bottom: 1px solid #f0f0f0; color: #444; }
+    .week-body tr:last-child td { border-bottom: none; }
+    .week-body tr:hover td { background: #f8f9fa; }
+    .week-toolbar {
+      display: flex; justify-content: flex-end; gap: 8px;
+      padding: 10px 16px; background: #fafbfc; border-top: 1px solid #eee;
+    }
 
-  /* ============================================================
-     MODAL
-     ============================================================ */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 40px;
-    overflow-y: auto;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal {
-    background: #fff;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 900px;
-    max-height: 85vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    margin-bottom: 40px;
-  }
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 1px solid #eee;
-  }
-  .modal-header h2 { font-size: 1.1rem; font-weight: 700; }
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    color: #999;
-    padding: 4px;
-    line-height: 1;
-  }
-  .modal-close:hover { color: #333; }
-  .modal-body {
-    padding: 20px 24px;
-    overflow-y: auto;
-    flex: 1;
-  }
-  .modal-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    border-top: 1px solid #eee;
-    gap: 8px;
-  }
-  .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-  .modal-body th {
-    text-align: left;
-    padding: 8px 10px;
-    background: #f8f9fa;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: #888;
-    border-bottom: 1px solid #eee;
-  }
-  .modal-body td { padding: 6px 8px; border-bottom: 1px solid #f0f0f0; }
-  .modal-body input, .modal-body select {
-    width: 100%;
-    padding: 6px 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.82rem;
-  }
-  .modal-body input:focus, .modal-body select:focus {
-    outline: none;
-    border-color: #0f3460;
-    box-shadow: 0 0 0 2px rgba(15,52,96,0.15);
-  }
-  .modal-body .delete-row-btn {
-    background: none;
-    border: none;
-    color: #e74c3c;
-    font-size: 1.1rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
-  .modal-body .delete-row-btn:hover { background: #fde8e8; }
+    /* ============================================================
+       modal
+       ============================================================ */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center;
+      align-items: flex-start; padding-top: 40px; overflow-y: auto;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #fff; border-radius: 12px; width: 90%; max-width: 900px; max-height: 85vh;
+      display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2); margin-bottom: 40px;
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; border-bottom: 1px solid #eee;
+    }
+    .modal-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .modal-close { background: none; border: none; font-size: 1.4rem; color: #999; padding: 4px; line-height: 1; }
+    .modal-close:hover { color: #333; }
+    .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+    .modal-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 24px; border-top: 1px solid #eee; gap: 8px;
+    }
+    .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .modal-body th {
+      text-align: left; padding: 8px 10px; background: #f8f9fa; font-weight: 600;
+      font-size: 0.75rem; text-transform: uppercase; color: #888; border-bottom: 1px solid #eee;
+    }
+    .modal-body td { padding: 6px 8px; border-bottom: 1px solid #f0f0f0; }
+    .modal-body input, .modal-body select {
+      width: 100%; padding: 6px 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.82rem;
+    }
+    .modal-body input:focus, .modal-body select:focus {
+      outline: none; border-color: #0f3460; box-shadow: 0 0 0 2px rgba(15,52,96,0.15);
+    }
+    .modal-body .delete-row-btn {
+      background: none; border: none; color: #e74c3c; font-size: 1.1rem;
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .modal-body .delete-row-btn:hover { background: #fde8e8; }
 
-  /* ============================================================
-     TEAM MANAGEMENT MODAL
-     ============================================================ */
-  .team-modal-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .team-modal-row input { flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; }
-  .team-modal-row input:first-child { flex: 2; }
-  .team-modal-row .delete-row-btn { flex-shrink: 0; }
+    /* ============================================================
+       team management modal
+       ============================================================ */
+    .team-modal-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+    .team-modal-row input { flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; }
+    .team-modal-row input:first-child { flex: 2; }
+    .team-modal-row .delete-row-btn { flex-shrink: 0; }
 
-  /* ============================================================
-     LOADING & STATUS
-     ============================================================ */
-  .loading-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255,255,255,0.85);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .loading-overlay.active { display: flex; }
-  .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid #e0e0e0;
-    border-top-color: #0f3460;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 0.85rem; color: #666; font-weight: 600; }
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #fff;
-    z-index: 3000;
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s;
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .toast-success { background: #27ae60; }
-  .toast-error { background: #e74c3c; }
+    /* ============================================================
+       loading & status
+       ============================================================ */
+    .loading-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.85); z-index: 2000; justify-content: center;
+      align-items: center; flex-direction: column; gap: 12px;
+    }
+    .loading-overlay.active { display: flex; }
+    .spinner {
+      width: 36px; height: 36px; border: 3px solid #e0e0e0; border-top-color: #0f3460;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 0.85rem; color: #666; font-weight: 600; }
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600; color: #fff; z-index: 3000;
+      transform: translatey(100px); opacity: 0; transition: all 0.3s;
+    }
+    .toast.show { transform: translatey(0); opacity: 1; }
+    .toast-success { background: #27ae60; }
+    .toast-error { background: #e74c3c; }
 
-  /* ============================================================
-     MISC
-     ============================================================ */
-  .empty-state {
-    text-align: center;
-    padding: 40px;
-    color: #aaa;
-    font-size: 0.9rem;
-  }
-  .connection-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: #888;
-    padding: 0 32px;
-  }
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #ccc;
-  }
-  .status-dot.connected { background: #27ae60; }
-  .status-dot.error { background: #e74c3c; }
-</style>
+    /* ============================================================
+       misc
+       ============================================================ */
+    .empty-state { text-align: center; padding: 40px; color: #aaa; font-size: 0.9rem; }
+    .connection-status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #888; padding: 0 32px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+    .status-dot.connected { background: #27ae60; }
+    .status-dot.error { background: #e74c3c; }
+  </style>
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
-<div class="loading-overlay" id="loadingOverlay">
+<!-- loading overlay -->
+<div class="loading-overlay" id="loadingoverlay">
   <div class="spinner"></div>
-  <div class="loading-text" id="loadingText">Loading dashboard...</div>
+  <div class="loading-text" id="loadingtext">loading dashboard...</div>
 </div>
 
-<!-- TOAST -->
+<!-- toast -->
 <div class="toast" id="toast"></div>
 
-<!-- HEADER -->
+<!-- header -->
 <div class="header">
-  <h1>Team Bandwidth Dashboard</h1>
-  <p class="subtitle">Team workload overview — filter by person, month, project, or view mode. Backed by Google Sheets.</p>
+  <h1>team bandwidth dashboard</h1>
+  <p class="subtitle">team workload overview — filter by person, month, project, or view mode. backed by google sheets.</p>
 </div>
 
-<!-- FILTERS -->
+<!-- filters -->
 <div class="filters">
   <div class="filter-group">
-    <label>Person</label>
-    <select id="filterPerson"><option value="">All Team</option></select>
+    <label>person</label>
+    <select id="filterperson"><option value="">all team</option></select>
   </div>
   <div class="filter-group">
-    <label>View</label>
-    <select id="filterView">
-      <option value="week">By Week</option>
-      <option value="month">By Month</option>
+    <label>view</label>
+    <select id="filterview">
+      <option value="week">by week</option>
+      <option value="month">by month</option>
     </select>
   </div>
   <div class="filter-group">
-    <label>Month</label>
-    <select id="filterMonth"><option value="">All Months</option></select>
+    <label>month</label>
+    <select id="filtermonth"><option value="">all months</option></select>
   </div>
   <div class="filter-group">
-    <label>Project</label>
-    <select id="filterProject"><option value="">All Projects</option></select>
+    <label>project</label>
+    <select id="filterproject"><option value="">all projects</option></select>
   </div>
   <div class="filter-group">
-    <label>Search</label>
-    <input type="text" id="searchBox" placeholder="Search project/task/person...">
+    <label>search</label>
+    <input type="text" id="searchbox" placeholder="search project/task/person...">
   </div>
   <div class="filter-group">
-    <label>Weekly Cap/Person</label>
-    <input type="number" id="defaultCapacity" value="40" min="1" max="168">
+    <label>weekly cap/person</label>
+    <input type="number" id="defaultcapacity" value="40" min="1" max="168">
   </div>
 </div>
 
-<!-- ACTIONS -->
+<!-- actions -->
 <div class="actions">
-  <button class="btn" id="btnExpandAll">Expand All</button>
-  <button class="btn" id="btnCollapseAll">Collapse All</button>
-  <button class="btn btn-success" id="btnExportCsv">Export CSV</button>
-  <button class="btn" id="btnRefresh">↻ Refresh Data</button>
-  <button class="btn btn-primary" id="btnManageTeam">Manage Team</button>
+  <button class="btn" id="btnexpandall">expand all</button>
+  <button class="btn" id="btncollapseall">collapse all</button>
+  <button class="btn btn-success" id="btnexportcsv">export csv</button>
+  <button class="btn" id="btnrefresh">↻ refresh data</button>
+  <button class="btn btn-primary" id="btnmanageteam">manage team</button>
   <label class="btn" style="margin-left:auto;">
-    📁 Import CSV
-    <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+    📁 import csv
+    <input type="file" id="csvfileinput" accept=".csv" style="display:none;">
   </label>
 </div>
 
-<!-- CONNECTION STATUS -->
+<!-- connection status -->
 <div class="connection-status">
-  <span class="status-dot" id="statusDot"></span>
-  <span id="statusText">Checking connection...</span>
+  <span class="status-dot" id="statusdot"></span>
+  <span id="statustext">checking connection...</span>
 </div>
 
-<!-- STATS CARDS -->
-<div class="stats-grid" id="statsGrid">
+<!-- stats cards -->
+<div class="stats-grid" id="statsgrid">
   <div class="stat-card">
-    <div class="label">Team Members</div>
-    <div class="value" id="statMembers">-</div>
-    <div class="detail" id="statMembersDetail"></div>
+    <div class="label">team members</div>
+    <div class="value" id="statmembers">-</div>
+    <div class="detail" id="statmembersdetail"></div>
   </div>
   <div class="stat-card">
-    <div class="label">Total Committed Hours</div>
-    <div class="value" id="statHours">-</div>
-    <div class="detail" id="statHoursDetail">sum across filtered view</div>
+    <div class="label">total committed hours</div>
+    <div class="value" id="stathours">-</div>
+    <div class="detail" id="stathoursdetail">sum across filtered view</div>
   </div>
   <div class="stat-card">
-    <div class="label">Team Capacity</div>
-    <div class="value" id="statCapacity">-</div>
-    <div class="detail" id="statCapacityDetail"></div>
+    <div class="label">team capacity</div>
+    <div class="value" id="statcapacity">-</div>
+    <div class="detail" id="statcapacitydetail"></div>
   </div>
   <div class="stat-card">
-    <div class="label">Team Utilization</div>
-    <div class="value" id="statUtil">-</div>
-    <div class="detail" id="statUtilDetail">committed ÷ capacity</div>
+    <div class="label">team utilization</div>
+    <div class="value" id="statutil">-</div>
+    <div class="detail" id="statutildetail">committed ÷ capacity</div>
   </div>
 </div>
 
-<!-- TEAM LOAD OVERVIEW -->
-<div class="section-title">Team Load Overview</div>
-<div class="team-grid" id="teamGrid"></div>
+<!-- team load overview -->
+<div class="section-title">team load overview</div>
+<div class="team-grid" id="teamgrid"></div>
 
-<!-- WEEKLY / MONTHLY SECTIONS -->
-<div class="section-title" id="periodsTitle">Weekly Breakdown</div>
-<div class="weeks-container" id="weeksContainer"></div>
+<!-- weekly / monthly sections -->
+<div class="section-title" id="periodstitle">weekly breakdown</div>
+<div class="weeks-container" id="weekscontainer"></div>
 
 <!-- ============================================================
-     TASK EDIT MODAL
+     task edit modal
      ============================================================ -->
-<div class="modal-overlay" id="taskModal">
+<div class="modal-overlay" id="taskmodal">
   <div class="modal">
     <div class="modal-header">
-      <h2 id="taskModalTitle">Edit Tasks</h2>
-      <button class="modal-close" id="taskModalClose">&times;</button>
+      <h2 id="taskmodaltitle">edit tasks</h2>
+      <button class="modal-close" id="taskmodalclose">&times;</button>
     </div>
-    <div class="modal-body" id="taskModalBody"></div>
+    <div class="modal-body" id="taskmodalbody"></div>
     <div class="modal-footer">
-      <button class="btn btn-success" id="taskModalAdd">+ Add Task</button>
+      <button class="btn btn-success" id="taskmodaladd">+ add task</button>
       <div style="display:flex;gap:8px;">
-        <button class="btn" id="taskModalCancel">Cancel</button>
-        <button class="btn btn-primary" id="taskModalSave">Save All Changes</button>
+        <button class="btn" id="taskmodalcancel">cancel</button>
+        <button class="btn btn-primary" id="taskmodalsave">save all changes</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ============================================================
-     TEAM MANAGEMENT MODAL
+     team management modal
      ============================================================ -->
-<div class="modal-overlay" id="teamModal">
+<div class="modal-overlay" id="teammodal">
   <div class="modal" style="max-width:550px;">
     <div class="modal-header">
-      <h2>Manage Team Members</h2>
-      <button class="modal-close" id="teamModalClose">&times;</button>
+      <h2>manage team members</h2>
+      <button class="modal-close" id="teammodalclose">&times;</button>
     </div>
-    <div class="modal-body" id="teamModalBody"></div>
+    <div class="modal-body" id="teammodalbody"></div>
     <div class="modal-footer">
-      <button class="btn btn-success" id="teamModalAdd">+ Add Member</button>
+      <button class="btn btn-success" id="teammodaladd">+ add member</button>
       <div style="display:flex;gap:8px;">
-        <button class="btn" id="teamModalCancel">Cancel</button>
-        <button class="btn btn-primary" id="teamModalSave">Save Team</button>
+        <button class="btn" id="teammodalcancel">cancel</button>
+        <button class="btn btn-primary" id="teammodalsave">save team</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ============================================================
-     JAVASCRIPT
+     javascript
      ============================================================ -->
 <script>
 // ============================================================
-// CONFIG — SET YOUR APPS SCRIPT URL HERE
+// config — set your apps script url here
 // ============================================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbyKgfugVvBZ3nXjh9H1OzN4JYwu-OWFe6LYtYF_ZzB0EJUKr9RxwAuta5MauWHERlGY/exec';
+const api_url = 'https://script.google.com/macros/s/akfycbykgfugvvbz3nxjh9h1ozn4jywu-owfe6lytyf_zzb0ejukr9rxwauta5mauwherlgy/exec';
 
 // ============================================================
-// STATE
+// state
 // ============================================================
-let STATE = {
-  tasks: [],
-  team: [],
-  connected: false
-};
+let state = { tasks: [], team: [], connected: false };
 
 // ============================================================
-// API HELPERS
+// api helpers
 // ============================================================
-async function apiGet(action) {
-  const resp = await fetch(`${API_URL}?action=${action}`);
+async function apiget(action) {
+  const resp = await fetch(`${api_url}?action=${action}`);
   return resp.json();
 }
 
-async function apiPost(body) {
-  const resp = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(body),
+async function apipost(body) {
+  const resp = await fetch(api_url, {
+    method: 'post',
+    headers: { 'content-type': 'text/plain;charset=utf-8' },
+    body: json.stringify(body),
     redirect: 'follow'
   });
   return resp.json();
 }
 
-function showLoading(msg) {
-  document.getElementById('loadingText').textContent = msg || 'Loading...';
-  document.getElementById('loadingOverlay').classList.add('active');
+function showloading(msg) {
+  document.getelementbyid('loadingtext').textcontent = msg || 'loading...';
+  document.getelementbyid('loadingoverlay').classlist.add('active');
 }
 
-function hideLoading() {
-  document.getElementById('loadingOverlay').classList.remove('active');
+function hideloading() {
+  document.getelementbyid('loadingoverlay').classlist.remove('active');
 }
 
-function showToast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast toast-' + (type || 'success') + ' show';
-  setTimeout(() => t.classList.remove('show'), 3000);
+function showtoast(msg, type) {
+  const t = document.getelementbyid('toast');
+  t.textcontent = msg;
+  t.classname = 'toast toast-' + (type || 'success') + ' show';
+  settimeout(() => t.classlist.remove('show'), 3000);
 }
 
 // ============================================================
-// INITIALIZATION
+// initialization
 // ============================================================
-document.addEventListener('DOMContentLoaded', async () => {
+document.addeventlistener('domcontentloaded', async () => {
   try {
-    showLoading('Connecting to database...');
-    const [taskRes, teamRes] = await Promise.all([apiGet('getTasks'), apiGet('getTeam')]);
-    if (taskRes.success) STATE.tasks = taskRes.tasks || [];
-    if (taskRes.success) {
-  STATE.tasks = (taskRes.tasks || []).map(t => {
-    delete t._sourceTab;
-    return t;
-  });
-}
-
-    if (teamRes.success) STATE.team = teamRes.team || [];
-    STATE.connected = true;
-    document.getElementById('statusDot').classList.add('connected');
-    document.getElementById('statusText').textContent = `Connected · ${STATE.tasks.length} tasks · ${STATE.team.length} members`;
-    hideLoading();
-    buildFilters();
+    showloading('connecting to database...');
+    const [taskres, teamres] = await promise.all([apiget('gettasks'), apiget('getteam')]);
+    if (taskres.success) state.tasks = taskres.tasks || [];
+    if (taskres.success) {
+      state.tasks = (taskres.tasks || []).map(t => {
+        delete t._sourcetab;
+        return t;
+      });
+    }
+    if (teamres.success) state.team = teamres.team || [];
+    state.connected = true;
+    document.getelementbyid('statusdot').classlist.add('connected');
+    document.getelementbyid('statustext').textcontent = `connected · ${state.tasks.length} tasks · ${state.team.length} members`;
+    hideloading();
+    buildfilters();
     render();
   } catch (e) {
-    hideLoading();
-    document.getElementById('statusDot').classList.add('error');
-    document.getElementById('statusText').textContent = 'Connection failed — check API URL';
-    showToast('Could not connect to Google Sheet API. Check console.', 'error');
+    hideloading();
+    document.getelementbyid('statusdot').classlist.add('error');
+    document.getelementbyid('statustext').textcontent = 'connection failed — check api url';
+    showtoast('could not connect to google sheet api. check console.', 'error');
     console.error(e);
   }
 
-  // EVENT LISTENERS
-  document.getElementById('filterPerson').addEventListener('change', render);
-  document.getElementById('filterView').addEventListener('change', render);
-  document.getElementById('filterMonth').addEventListener('change', render);
-  document.getElementById('filterProject').addEventListener('change', render);
-  document.getElementById('searchBox').addEventListener('input', render);
-  document.getElementById('defaultCapacity').addEventListener('change', render);
-  document.getElementById('btnExpandAll').addEventListener('click', () => toggleAllWeeks(true));
-  document.getElementById('btnCollapseAll').addEventListener('click', () => toggleAllWeeks(false));
-  document.getElementById('btnExportCsv').addEventListener('click', exportCsv);
-  document.getElementById('btnRefresh').addEventListener('click', refreshData);
-  document.getElementById('btnManageTeam').addEventListener('click', openTeamModal);
-  document.getElementById('csvFileInput').addEventListener('change', importCsv);
+  // event listeners
+  document.getelementbyid('filterperson').addeventlistener('change', render);
+  document.getelementbyid('filterview').addeventlistener('change', render);
+  document.getelementbyid('filtermonth').addeventlistener('change', render);
+  document.getelementbyid('filterproject').addeventlistener('change', render);
+  document.getelementbyid('searchbox').addeventlistener('input', render);
+  document.getelementbyid('defaultcapacity').addeventlistener('change', render);
 
-  // Task modal
-  document.getElementById('taskModalClose').addEventListener('click', closeTaskModal);
-  document.getElementById('taskModalCancel').addEventListener('click', closeTaskModal);
-  document.getElementById('taskModalSave').addEventListener('click', saveTaskModal);
-  document.getElementById('taskModalAdd').addEventListener('click', addRowToTaskModal);
+  document.getelementbyid('btnexpandall').addeventlistener('click', () => toggleallweeks(true));
+  document.getelementbyid('btncollapseall').addeventlistener('click', () => toggleallweeks(false));
+  document.getelementbyid('btnexportcsv').addeventlistener('click', exportcsv);
+  document.getelementbyid('btnrefresh').addeventlistener('click', refreshdata);
+  document.getelementbyid('btnmanageteam').addeventlistener('click', openteammodal);
+  document.getelementbyid('csvfileinput').addeventlistener('change', importcsv);
 
-  // Team modal
-  document.getElementById('teamModalClose').addEventListener('click', closeTeamModal);
-  document.getElementById('teamModalCancel').addEventListener('click', closeTeamModal);
-  document.getElementById('teamModalSave').addEventListener('click', saveTeamModal);
-  document.getElementById('teamModalAdd').addEventListener('click', addRowToTeamModal);
+  // task modal
+  document.getelementbyid('taskmodalclose').addeventlistener('click', closetaskmodal);
+  document.getelementbyid('taskmodalcancel').addeventlistener('click', closetaskmodal);
+  document.getelementbyid('taskmodalsave').addeventlistener('click', savetaskmodal);
+  document.getelementbyid('taskmodaladd').addeventlistener('click', addrowtotaskmodal);
+
+  // team modal
+  document.getelementbyid('teammodalclose').addeventlistener('click', closeteammodal);
+  document.getelementbyid('teammodalcancel').addeventlistener('click', closeteammodal);
+  document.getelementbyid('teammodalsave').addeventlistener('click', saveteammodal);
+  document.getelementbyid('teammodaladd').addeventlistener('click', addrowtoteammodal);
 });
 
-async function refreshData() {
+async function refreshdata() {
   try {
-    showLoading('Refreshing data...');
-    const [taskRes, teamRes] = await Promise.all([apiGet('getTasks'), apiGet('getTeam')]);
-    if (taskRes.success) STATE.tasks = taskRes.tasks || [];
-    if (taskRes.success) {
-  STATE.tasks = (taskRes.tasks || []).map(t => {
-    delete t._sourceTab;
-    return t;
-  });
-}
-
-    if (teamRes.success) STATE.team = teamRes.team || [];
-    hideLoading();
-    buildFilters();
+    showloading('refreshing data...');
+    const [taskres, teamres] = await promise.all([apiget('gettasks'), apiget('getteam')]);
+    if (taskres.success) state.tasks = taskres.tasks || [];
+    if (taskres.success) {
+      state.tasks = (taskres.tasks || []).map(t => {
+        delete t._sourcetab;
+        return t;
+      });
+    }
+    if (teamres.success) state.team = teamres.team || [];
+    hideloading();
+    buildfilters();
     render();
-    showToast('Data refreshed!');
+    showtoast('data refreshed!');
   } catch (e) {
-    hideLoading();
-    showToast('Refresh failed', 'error');
+    hideloading();
+    showtoast('refresh failed', 'error');
   }
 }
 
 // ============================================================
-// FILTERS
+// filters
 // ============================================================
-function buildFilters() {
-  // Person
-  const personSel = document.getElementById('filterPerson');
-  const curPerson = personSel.value;
-  personSel.innerHTML = '<option value="">All Team</option>';
-  const names = [...new Set(STATE.team.map(m => m.name))];
-  STATE.tasks.forEach(t => { if (t.assignee && !names.includes(t.assignee)) names.push(t.assignee); });
-  names.sort((a, b) => a.localeCompare(b));
-  names.forEach(n => {
-    const o = document.createElement('option');
-    o.value = n; o.textContent = n;
-    if (n === curPerson) o.selected = true;
-    personSel.appendChild(o);
+function buildfilters() {
+  // person
+  const personsel = document.getelementbyid('filterperson');
+  const curperson = personsel.value;
+  personsel.innerhtml = '<option value="">all team</option>';
+  const names = [...new set(state.team.map(m => m.name))];
+  state.tasks.foreach(t => {
+    if (t.assignee && !names.includes(t.assignee)) names.push(t.assignee);
+  });
+  names.sort((a, b) => a.localecompare(b));
+  names.foreach(n => {
+    const o = document.createelement('option');
+    o.value = n; o.textcontent = n;
+    if (n === curperson) o.selected = true;
+    personsel.appendchild(o);
   });
 
-  // Month
-  const monthSel = document.getElementById('filterMonth');
-  const curMonth = monthSel.value;
-  monthSel.innerHTML = '<option value="">All Months</option>';
-  const months = new Set();
-  STATE.tasks.forEach(t => {
+  // month
+  const monthsel = document.getelementbyid('filtermonth');
+  const curmonth = monthsel.value;
+  monthsel.innerhtml = '<option value="">all months</option>';
+  const months = new set();
+  state.tasks.foreach(t => {
     if (t.due) {
-      const d = parseDate(t.due);
-      if (d) months.add(d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'));
+      const d = parsedate(t.due);
+      if (d) months.add(d.getfullyear() + '-' + string(d.getmonth()+1).padstart(2,'0'));
     }
   });
-  [...months].sort().forEach(m => {
-    const o = document.createElement('option');
+  [...months].sort().foreach(m => {
+    const o = document.createelement('option');
     o.value = m;
     const [y, mo] = m.split('-');
-    o.textContent = new Date(y, mo-1).toLocaleString('default', { month: 'long', year: 'numeric' });
-    if (m === curMonth) o.selected = true;
-    monthSel.appendChild(o);
+    o.textcontent = new date(y, mo-1).tolocalestring('default', { month: 'long', year: 'numeric' });
+    if (m === curmonth) o.selected = true;
+    monthsel.appendchild(o);
   });
 
-  // Project
-  const projSel = document.getElementById('filterProject');
-  const curProj = projSel.value;
-  projSel.innerHTML = '<option value="">All Projects</option>';
-  const projects = [...new Set(STATE.tasks.map(t => t.project).filter(Boolean))].sort();
-  projects.forEach(p => {
-    const o = document.createElement('option');
-    o.value = p; o.textContent = p;
-    if (p === curProj) o.selected = true;
-    projSel.appendChild(o);
+  // project
+  const projsel = document.getelementbyid('filterproject');
+  const curproj = projsel.value;
+  projsel.innerhtml = '<option value="">all projects</option>';
+  const projects = [...new set(state.tasks.map(t => t.project).filter(boolean))].sort();
+  projects.foreach(p => {
+    const o = document.createelement('option');
+    o.value = p; o.textcontent = p;
+    if (p === curproj) o.selected = true;
+    projsel.appendchild(o);
   });
 }
 
 // ============================================================
-// DATE & WEEK HELPERS
+// date & week helpers
 // ============================================================
-function parseDate(str) {
+function parsedate(str) {
   if (!str) return null;
-  if (str instanceof Date) return str;
-  str = str.toString().trim();
+  if (str instanceof date) return str;
+  str = str.tostring().trim();
   if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
-    const parts = str.split('T')[0].split('-');
-    return new Date(parts[0], parts[1]-1, parts[2]);
+    const parts = str.split('t')[0].split('-');
+    return new date(parts[0], parts[1]-1, parts[2]);
   }
   if (/^\d{1,2}\/\d{1,2}\/\d{4}/.test(str)) {
     const parts = str.split('/');
-    return new Date(parts[2], parts[0]-1, parts[1]);
+    return new date(parts[2], parts[0]-1, parts[1]);
   }
-  const d = new Date(str);
-  return isNaN(d) ? null : d;
+  const d = new date(str);
+  return isnan(d) ? null : d;
 }
 
-function getWeekStart(date) {
-  const d = new Date(date);
-  const day = d.getDay();
+function getweekstart(date) {
+  const d = new date(date);
+  const day = d.getday();
   const diff = day === 0 ? 6 : day - 1;
-  d.setDate(d.getDate() - diff);
-  d.setHours(0,0,0,0);
+  d.setdate(d.getdate() - diff);
+  d.sethours(0,0,0,0);
   return d;
 }
 
-function getWeekEnd(weekStart) {
-  const d = new Date(weekStart);
-  d.setDate(d.getDate() + 6);
+function getweekend(weekstart) {
+  const d = new date(weekstart);
+  d.setdate(d.getdate() + 6);
   return d;
 }
 
-function formatDate(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+function formatdate(d) {
+  return d.getfullyear() + '-' + string(d.getmonth()+1).padstart(2,'0') + '-' + string(d.getdate()).padstart(2,'0');
 }
 
-function dateToMonthKey(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+function datetomonthkey(d) {
+  return d.getfullyear() + '-' + string(d.getmonth()+1).padstart(2,'0');
 }
 
 // ============================================================
-// MONTH-TO-WEEKS CONVERSION HELPERS (FIX)
+// month-to-weeks conversion helpers
 // ============================================================
-function getWeeksInMonthKey(monthKey) {
-  const [y, mo] = monthKey.split('-').map(Number);
-  const daysInMonth = new Date(y, mo, 0).getDate();
-  return daysInMonth / 7;
+function getweeksinmonthkey(monthkey) {
+  const [y, mo] = monthkey.split('-').map(number);
+  const daysinmonth = new date(y, mo, 0).getdate();
+  return daysinmonth / 7;
 }
 
-function getTotalWeeks(sortedKeys, viewMode) {
-  if (viewMode === 'month') {
-    return sortedKeys.reduce((sum, key) => sum + getWeeksInMonthKey(key), 0);
+function gettotalweeks(sortedkeys, viewmode) {
+  if (viewmode === 'month') {
+    return sortedkeys.reduce((sum, key) => sum + getweeksinmonthkey(key), 0);
   }
-  return sortedKeys.length;
+  return sortedkeys.length;
 }
 
-function getWeeksForPeriod(key, viewMode) {
-  if (viewMode === 'month') {
-    return getWeeksInMonthKey(key);
+function getweeksforperiod(key, viewmode) {
+  if (viewmode === 'month') {
+    return getweeksinmonthkey(key);
   }
   return 1;
 }
 
 // ============================================================
-// MAIN RENDER
+// main render
 // ============================================================
 function render() {
-  const personFilter = document.getElementById('filterPerson').value;
-  const viewMode = document.getElementById('filterView').value;
-  const monthFilter = document.getElementById('filterMonth').value;
-  const projectFilter = document.getElementById('filterProject').value;
-  const search = document.getElementById('searchBox').value.toLowerCase().trim();
-  const defaultCap = parseFloat(document.getElementById('defaultCapacity').value) || 40;
+  const personfilter = document.getelementbyid('filterperson').value;
+  const viewmode = document.getelementbyid('filterview').value;
+  const monthfilter = document.getelementbyid('filtermonth').value;
+  const projectfilter = document.getelementbyid('filterproject').value;
+  const search = document.getelementbyid('searchbox').value.tolowercase().trim();
+  const defaultcap = parsefloat(document.getelementbyid('defaultcapacity').value) || 40;
 
-  // Filter tasks
-  let filtered = STATE.tasks.filter(t => {
-    const d = parseDate(t.due);
+  // filter tasks
+  let filtered = state.tasks.filter(t => {
+    const d = parsedate(t.due);
     if (!d) return false;
-    if (personFilter && t.assignee !== personFilter) return false;
-    if (monthFilter && dateToMonthKey(d) !== monthFilter) return false;
-    if (projectFilter && t.project !== projectFilter) return false;
+    if (personfilter && t.assignee !== personfilter) return false;
+    if (monthfilter && datetomonthkey(d) !== monthfilter) return false;
+    if (projectfilter && t.project !== projectfilter) return false;
     if (search) {
-      const hay = `${t.assignee} ${t.project} ${t.task}`.toLowerCase();
+      const hay = `${t.assignee} ${t.project} ${t.task}`.tolowercase();
       if (!hay.includes(search)) return false;
     }
     return true;
   });
 
-  // Determine team members to show
-  let teamMembers = STATE.team.length > 0 ? [...STATE.team] : [];
-  if (personFilter) teamMembers = teamMembers.filter(m => m.name === personFilter);
-  const memberCount = personFilter ? 1 : (STATE.team.length || [...new Set(STATE.tasks.map(t => t.assignee))].length);
+  // determine team members to show
+  let teammembers = state.team.length > 0 ? [...state.team] : [];
+  if (personfilter) teammembers = teammembers.filter(m => m.name === personfilter);
+  const membercount = personfilter ? 1 : (state.team.length || [...new set(state.tasks.map(t => t.assignee))].length);
 
-  // Group tasks by period
+  // group tasks by period
   let periods = {};
-  filtered.forEach(t => {
-    const d = parseDate(t.due);
+  filtered.foreach(t => {
+    const d = parsedate(t.due);
     let key;
-    if (viewMode === 'month') {
-      key = dateToMonthKey(d);
+    if (viewmode === 'month') {
+      key = datetomonthkey(d);
     } else {
-      const ws = getWeekStart(d);
-      key = formatDate(ws);
+      const ws = getweekstart(d);
+      key = formatdate(ws);
     }
     if (!periods[key]) periods[key] = [];
     periods[key].push(t);
   });
 
-  // Sort period keys
-  const sortedKeys = Object.keys(periods).sort();
+  // sort period keys
+  const sortedkeys = object.keys(periods).sort();
 
-  // STATS (FIXED: convert months to weeks for capacity calc)
-  const totalHours = filtered.reduce((s, t) => s + (parseFloat(t.hours) || 0), 0);
-  const periodCount = sortedKeys.length;
-  const totalWeeks = getTotalWeeks(sortedKeys, viewMode);
-  const capacity = memberCount * defaultCap * totalWeeks;
-  const utilization = capacity > 0 ? (totalHours / capacity * 100) : 0;
+  // stats
+  const totalhours = filtered.reduce((s, t) => s + (parsefloat(t.hours) || 0), 0);
+  const periodcount = sortedkeys.length;
+  const totalweeks = gettotalweeks(sortedkeys, viewmode);
+  const capacity = membercount * defaultcap * totalweeks;
+  const utilization = capacity > 0 ? (totalhours / capacity * 100) : 0;
 
-  document.getElementById('statMembers').textContent = memberCount;
-  document.getElementById('statMembersDetail').textContent = '';
-  document.getElementById('statHours').textContent = totalHours.toFixed(1) + ' hrs';
-  document.getElementById('statHoursDetail').textContent = `across ${periodCount} ${viewMode === 'month' ? 'month(s)' : 'week(s)'} · sum across filtered view`;
-  document.getElementById('statCapacity').textContent = capacity.toFixed(1) + ' hrs';
-  document.getElementById('statCapacityDetail').textContent = viewMode === 'month'
-    ? `${memberCount} × ${defaultCap}h × ${totalWeeks.toFixed(1)} wks (${periodCount} mo)`
-    : `${memberCount} × ${defaultCap}h × ${periodCount} wk`;
-  document.getElementById('statUtil').textContent = utilization.toFixed(1) + '%';
-  document.getElementById('statUtilDetail').textContent = 'committed ÷ capacity';
+  document.getelementbyid('statmembers').textcontent = membercount;
+  document.getelementbyid('statmembersdetail').textcontent = '';
+  document.getelementbyid('stathours').textcontent = totalhours.tofixed(1) + ' hrs';
+  document.getelementbyid('stathoursdetail').textcontent = `across ${periodcount} ${viewmode === 'month' ? 'month(s)' : 'week(s)'} · sum across filtered view`;
+  document.getelementbyid('statcapacity').textcontent = capacity.tofixed(1) + ' hrs';
+  document.getelementbyid('statcapacitydetail').textcontent = viewmode === 'month'
+    ? `${membercount} × ${defaultcap}h × ${totalweeks.tofixed(1)} wks (${periodcount} mo)`
+    : `${membercount} × ${defaultcap}h × ${periodcount} wk`;
+  document.getelementbyid('statutil').textcontent = utilization.tofixed(1) + '%';
+  document.getelementbyid('statutildetail').textcontent = 'committed ÷ capacity';
 
-  // TEAM LOAD OVERVIEW (FIXED: pass totalWeeks instead of periodCount)
-  renderTeamLoad(filtered, defaultCap, totalWeeks, viewMode);
+  // team load overview
+  renderteamload(filtered, defaultcap, totalweeks, viewmode);
 
-  // PERIOD BLOCKS
-  document.getElementById('periodsTitle').textContent = viewMode === 'month' ? 'Monthly Breakdown' : 'Weekly Breakdown';
-  renderPeriods(sortedKeys, periods, viewMode, defaultCap, memberCount);
+  // period blocks
+  document.getelementbyid('periodstitle').textcontent = viewmode === 'month' ? 'monthly breakdown' : 'weekly breakdown';
+  renderperiods(sortedkeys, periods, viewmode, defaultcap, membercount);
 }
 
-function getLoadClass(hours, capacity) {
+function getloadclass(hours, capacity) {
   if (capacity === 0) return 'light';
   const pct = hours / capacity;
   if (pct >= 0.85) return 'heavy';
@@ -861,442 +692,447 @@ function getLoadClass(hours, capacity) {
   return 'light';
 }
 
-// FIXED: parameter is now totalWeeks, not periodCount
-function renderTeamLoad(filtered, defaultCap, totalWeeks, viewMode) {
-  const grid = document.getElementById('teamGrid');
-  grid.innerHTML = '';
-  const personFilter = document.getElementById('filterPerson').value;
-  let members = STATE.team.length > 0 ? [...STATE.team] : [];
-  if (personFilter) members = members.filter(m => m.name === personFilter);
-
+function renderteamload(filtered, defaultcap, totalweeks, viewmode) {
+  const grid = document.getelementbyid('teamgrid');
+  grid.innerhtml = '';
+  const personfilter = document.getelementbyid('filterperson').value;
+  let members = state.team.length > 0 ? [...state.team] : [];
+  if (personfilter) members = members.filter(m => m.name === personfilter);
   if (members.length === 0) {
-    const names = [...new Set(filtered.map(t => t.assignee).filter(Boolean))];
-    members = names.map(n => ({ name: n, weeklyCapacity: defaultCap }));
+    const names = [...new set(filtered.map(t => t.assignee).filter(boolean))];
+    members = names.map(n => ({ name: n, weeklycapacity: defaultcap }));
   }
 
-  members.forEach(m => {
-    // FIXED: multiply by totalWeeks (actual weeks) instead of periodCount
-    const cap = (parseFloat(m.weeklyCapacity) || defaultCap) * Math.max(totalWeeks, 1);
-    const myTasks = filtered.filter(t => t.assignee === m.name);
-    const hrs = myTasks.reduce((s, t) => s + (parseFloat(t.hours) || 0), 0);
-    const projects = new Set(myTasks.map(t => t.project).filter(Boolean));
-    const loadClass = getLoadClass(hrs, cap);
-    const pct = cap > 0 ? Math.min(hrs / cap * 100, 100) : 0;
+  members.foreach(m => {
+    const cap = (parsefloat(m.weeklycapacity) || defaultcap) * math.max(totalweeks, 1);
+    const mytasks = filtered.filter(t => t.assignee === m.name);
+    const hrs = mytasks.reduce((s, t) => s + (parsefloat(t.hours) || 0), 0);
+    const projects = new set(mytasks.map(t => t.project).filter(boolean));
+    const loadclass = getloadclass(hrs, cap);
+    const pct = cap > 0 ? math.min(hrs / cap * 100, 100) : 0;
 
-    const card = document.createElement('div');
-    card.className = `team-card load-${loadClass}`;
-    card.innerHTML = `
+    const card = document.createelement('div');
+    card.classname = `team-card load-${loadclass}`;
+    card.innerhtml = `
       <div class="name">${esc(m.name)}</div>
-      <div class="hours-label">${hrs.toFixed(1)}h / ${cap.toFixed(1)}h capacity</div>
+      <div class="hours-label">${hrs.tofixed(1)}h / ${cap.tofixed(1)}h capacity</div>
       <div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div>
-      <div class="meta"><span class="load-badge">${loadClass}</span> · ${myTasks.length} task(s) · ${projects.size} project(s)</div>
+      <div class="meta"><span class="load-badge">${loadclass}</span> · ${mytasks.length} task(s) · ${projects.size} project(s)</div>
     `;
-    grid.appendChild(card);
+    grid.appendchild(card);
   });
 }
 
-function renderPeriods(keys, periods, viewMode, defaultCap, memberCount) {
-  const container = document.getElementById('weeksContainer');
-  container.innerHTML = '';
-
+function renderperiods(keys, periods, viewmode, defaultcap, membercount) {
+  const container = document.getelementbyid('weekscontainer');
+  container.innerhtml = '';
   if (keys.length === 0) {
-    container.innerHTML = '<div class="empty-state">No tasks found for the current filters.</div>';
+    container.innerhtml = '<div class="empty-state">no tasks found for the current filters.</div>';
     return;
   }
 
-  keys.forEach(key => {
+  keys.foreach(key => {
     const tasks = periods[key];
-    const totalHrs = tasks.reduce((s, t) => s + (parseFloat(t.hours) || 0), 0);
-    const projects = new Set(tasks.map(t => t.project).filter(Boolean));
-    const persons = new Set(tasks.map(t => t.assignee).filter(Boolean));
+    const totalhrs = tasks.reduce((s, t) => s + (parsefloat(t.hours) || 0), 0);
+    const projects = new set(tasks.map(t => t.project).filter(boolean));
+    const persons = new set(tasks.map(t => t.assignee).filter(boolean));
+    const weeksinperiod = getweeksforperiod(key, viewmode);
+    const cap = membercount * defaultcap * weeksinperiod;
+    const available = cap - totalhrs;
+    const loadclass = getloadclass(totalhrs, cap);
 
-    // FIXED: multiply by weeks in this period, not just raw 1
-    const weeksInPeriod = getWeeksForPeriod(key, viewMode);
-    const cap = memberCount * defaultCap * weeksInPeriod;
-    const available = cap - totalHrs;
-    const loadClass = getLoadClass(totalHrs, cap);
-
-    let rangeLabel, monthLabel;
-    if (viewMode === 'month') {
+    let rangelabel, monthlabel;
+    if (viewmode === 'month') {
       const [y, mo] = key.split('-');
-      rangeLabel = new Date(y, mo-1).toLocaleString('default', { month: 'long', year: 'numeric' });
-      monthLabel = '';
+      rangelabel = new date(y, mo-1).tolocalestring('default', { month: 'long', year: 'numeric' });
+      monthlabel = '';
     } else {
-      const ws = new Date(key + 'T00:00:00');
-      const we = getWeekEnd(ws);
-      rangeLabel = `${formatDate(ws)} / ${formatDate(we)}`;
-      monthLabel = ws.toLocaleString('default', { month: 'short', year: 'numeric' });
+      const ws = new date(key + 't00:00:00');
+      const we = getweekend(ws);
+      rangelabel = `${formatdate(ws)} / ${formatdate(we)}`;
+      monthlabel = ws.tolocalestring('default', { month: 'short', year: 'numeric' });
     }
 
-    const block = document.createElement('div');
-    block.className = 'week-block';
-    block.innerHTML = `
+    const block = document.createelement('div');
+    block.classname = 'week-block';
+    block.innerhtml = `
       <div class="week-header" data-key="${key}">
         <div class="left">
           <span class="chevron">▶</span>
-          <span class="week-range">${rangeLabel}</span>
-          ${monthLabel ? `<span class="month-label">${monthLabel}</span>` : ''}
+          <span class="week-range">${rangelabel}</span>
+          ${monthlabel ? `<span class="month-label">${monthlabel}</span>` : ''}
         </div>
         <div class="right">
-          <span class="hours-pill pill-${loadClass}">${totalHrs.toFixed(1)} hrs</span>
-          <span class="week-meta">${loadClass} · ${projects.size} project(s) · ${tasks.length} task(s) · ${persons.size} person(s) · available: ${available.toFixed(1)}h</span>
+          <span class="hours-pill pill-${loadclass}">${totalhrs.tofixed(1)} hrs</span>
+          <span class="week-meta">${loadclass} · ${projects.size} project(s) · ${tasks.length} task(s) · ${persons.size} person(s) · available: ${available.tofixed(1)}h</span>
         </div>
       </div>
       <div class="week-body" id="body-${key}">
         <table>
-          <thead><tr><th>Assignee</th><th>Project</th><th>Task</th><th>Due</th><th>Hours</th></tr></thead>
+          <thead><tr><th>assignee</th><th>project</th><th>task</th><th>due</th><th>hours</th><th>status</th><th>notes</th></tr></thead>
           <tbody>
             ${tasks.map(t => `<tr>
               <td>${esc(t.assignee)}</td>
               <td>${esc(t.project)}</td>
               <td>${esc(t.task)}</td>
               <td>${esc(t.due)}</td>
-              <td>${parseFloat(t.hours || 0).toFixed(1)}</td>
+              <td>${parsefloat(t.hours || 0).tofixed(1)}</td>
+              <td>${esc(t.status || '')}</td>
+              <td>${esc(t.notes || '')}</td>
             </tr>`).join('')}
           </tbody>
         </table>
         <div class="week-toolbar">
-          <button class="btn btn-primary btn-edit-period" data-key="${key}">✏️ Edit Tasks</button>
+          <button class="btn btn-primary btn-edit-period" data-key="${key}">✏ edit tasks</button>
         </div>
       </div>
     `;
+    container.appendchild(block);
 
-    container.appendChild(block);
-
-    block.querySelector('.week-header').addEventListener('click', () => {
-      const body = block.querySelector('.week-body');
-      const chev = block.querySelector('.chevron');
-      body.classList.toggle('open');
-      chev.classList.toggle('open');
+    block.queryselector('.week-header').addeventlistener('click', () => {
+      const body = block.queryselector('.week-body');
+      const chev = block.queryselector('.chevron');
+      body.classlist.toggle('open');
+      chev.classlist.toggle('open');
     });
 
-    block.querySelector('.btn-edit-period').addEventListener('click', (e) => {
-      e.stopPropagation();
-      openTaskModal(key, tasks, viewMode);
+    block.queryselector('.btn-edit-period').addeventlistener('click', (e) => {
+      e.stoppropagation();
+      opentaskmodal(key, tasks, viewmode);
     });
   });
 }
 
-function toggleAllWeeks(open) {
-  document.querySelectorAll('.week-body').forEach(b => {
-    if (open) { b.classList.add('open'); b.previousElementSibling.querySelector('.chevron').classList.add('open'); }
-    else { b.classList.remove('open'); b.previousElementSibling.querySelector('.chevron').classList.remove('open'); }
+function toggleallweeks(open) {
+  document.queryselectorall('.week-body').foreach(b => {
+    if (open) {
+      b.classlist.add('open');
+      b.previouselementsibling.queryselector('.chevron').classlist.add('open');
+    } else {
+      b.classlist.remove('open');
+      b.previouselementsibling.queryselector('.chevron').classlist.remove('open');
+    }
   });
 }
 
 // ============================================================
-// TASK EDIT MODAL
+// task edit modal
 // ============================================================
-let modalTasks = [];
-let modalKey = '';
+let modaltasks = [];
+let modalkey = '';
 
-function openTaskModal(key, tasks, viewMode) {
-  modalKey = key;
-  modalTasks = tasks.map(t => ({ ...t }));
+function opentaskmodal(key, tasks, viewmode) {
+  modalkey = key;
+  modaltasks = tasks.map(t => ({ ...t }));
   let title;
-  if (viewMode === 'month') {
+  if (viewmode === 'month') {
     const [y, mo] = key.split('-');
-    title = 'Edit Tasks — ' + new Date(y, mo-1).toLocaleString('default', { month: 'long', year: 'numeric' });
+    title = 'edit tasks — ' + new date(y, mo-1).tolocalestring('default', { month: 'long', year: 'numeric' });
   } else {
-    const ws = new Date(key + 'T00:00:00');
-    const we = getWeekEnd(ws);
-    title = `Edit Tasks — ${formatDate(ws)} to ${formatDate(we)}`;
+    const ws = new date(key + 't00:00:00');
+    const we = getweekend(ws);
+    title = `edit tasks — ${formatdate(ws)} to ${formatdate(we)}`;
   }
-  document.getElementById('taskModalTitle').textContent = title;
-  renderTaskModalTable();
-  document.getElementById('taskModal').classList.add('active');
+  document.getelementbyid('taskmodaltitle').textcontent = title;
+  rendertaskmodaltable();
+  document.getelementbyid('taskmodal').classlist.add('active');
 }
 
-function closeTaskModal() {
-  document.getElementById('taskModal').classList.remove('active');
-  modalTasks = [];
+function closetaskmodal() {
+  document.getelementbyid('taskmodal').classlist.remove('active');
+  modaltasks = [];
 }
 
-function renderTaskModalTable() {
-  const body = document.getElementById('taskModalBody');
-  const teamNames = STATE.team.map(m => m.name);
-  const allNames = [...new Set([...teamNames, ...STATE.tasks.map(t => t.assignee).filter(Boolean)])].sort();
-  const allProjects = [...new Set(STATE.tasks.map(t => t.project).filter(Boolean))].sort();
+function rendertaskmodaltable() {
+  const body = document.getelementbyid('taskmodalbody');
+  const teamnames = state.team.map(m => m.name);
+  const allnames = [...new set([...teamnames, ...state.tasks.map(t => t.assignee).filter(boolean)])].sort();
+  const allprojects = [...new set(state.tasks.map(t => t.project).filter(boolean))].sort();
 
-  if (modalTasks.length === 0) {
-    body.innerHTML = '<div class="empty-state">No tasks. Click "+ Add Task" below to create one.</div>';
+  if (modaltasks.length === 0) {
+    body.innerhtml = '<div class="empty-state">no tasks. click "+ add task" below to create one.</div>';
     return;
   }
 
   let html = `<table><thead><tr>
-    <th>Assignee</th><th>Project</th><th>Task</th><th>Due</th><th>Hours</th><th></th>
+    <th>assignee</th><th>project</th><th>task</th><th>due</th><th>hours</th><th>status</th><th>notes</th><th></th>
   </tr></thead><tbody>`;
 
-  modalTasks.forEach((t, i) => {
+  modaltasks.foreach((t, i) => {
     html += `<tr>
       <td>
         <select data-idx="${i}" data-field="assignee">
           <option value="">—</option>
-          ${allNames.map(n => `<option value="${esc(n)}" ${t.assignee === n ? 'selected' : ''}>${esc(n)}</option>`).join('')}
+          ${allnames.map(n => `<option value="${esc(n)}" ${t.assignee === n ? 'selected' : ''}>${esc(n)}</option>`).join('')}
         </select>
       </td>
-      <td><input type="text" data-idx="${i}" data-field="project" value="${esc(t.project || '')}" list="projectList"></td>
+      <td><input type="text" data-idx="${i}" data-field="project" value="${esc(t.project || '')}" list="projectlist"></td>
       <td><input type="text" data-idx="${i}" data-field="task" value="${esc(t.task || '')}"></td>
       <td><input type="date" data-idx="${i}" data-field="due" value="${t.due || ''}"></td>
       <td><input type="number" data-idx="${i}" data-field="hours" value="${t.hours || 0}" step="0.5" min="0" style="width:70px"></td>
-      <td><button class="delete-row-btn" data-idx="${i}" title="Remove">✕</button></td>
+      <td>
+        <select data-idx="${i}" data-field="status">
+          <option value="">—</option>
+          <option value="Not Started" ${t.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
+          <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+          <option value="Blocked" ${t.status === 'Blocked' ? 'selected' : ''}>Blocked</option>
+          <option value="Complete" ${t.status === 'Complete' ? 'selected' : ''}>Complete</option>
+        </select>
+      </td>
+      <td><input type="text" data-idx="${i}" data-field="notes" value="${esc(t.notes || '')}" placeholder="notes..."></td>
+      <td><button class="delete-row-btn" data-idx="${i}" title="remove">✕</button></td>
     </tr>`;
   });
 
   html += `</tbody></table>`;
-  html += `<datalist id="projectList">${allProjects.map(p => `<option value="${esc(p)}">`).join('')}</datalist>`;
+  html += `<datalist id="projectlist">${allprojects.map(p => `<option value="${esc(p)}">`).join('')}</datalist>`;
+  body.innerhtml = html;
 
-  body.innerHTML = html;
-
-  body.querySelectorAll('input, select').forEach(el => {
-    el.addEventListener('change', () => {
-      const idx = parseInt(el.dataset.idx);
+  body.queryselectorall('input, select').foreach(el => {
+    el.addeventlistener('change', () => {
+      const idx = parseint(el.dataset.idx);
       const field = el.dataset.field;
       let val = el.value;
-      if (field === 'hours') val = parseFloat(val) || 0;
-      modalTasks[idx][field] = val;
+      if (field === 'hours') val = parsefloat(val) || 0;
+      modaltasks[idx][field] = val;
     });
   });
 
-  body.querySelectorAll('.delete-row-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.idx);
-      modalTasks.splice(idx, 1);
-      renderTaskModalTable();
+  body.queryselectorall('.delete-row-btn').foreach(btn => {
+    btn.addeventlistener('click', () => {
+      const idx = parseint(btn.dataset.idx);
+      modaltasks.splice(idx, 1);
+      rendertaskmodaltable();
     });
   });
 }
 
-function addRowToTaskModal() {
-  let defaultDue = '';
-  if (modalKey.length === 10) {
-    defaultDue = modalKey;
-  } else if (modalKey.length === 7) {
-    const [y, mo] = modalKey.split('-');
-    defaultDue = `${y}-${mo}-01`;
+function addrowtotaskmodal() {
+  let defaultdue = '';
+  if (modalkey.length === 10) {
+    defaultdue = modalkey;
+  } else if (modalkey.length === 7) {
+    const [y, mo] = modalkey.split('-');
+    defaultdue = `${y}-${mo}-01`;
   }
-  modalTasks.push({ assignee: '', project: '', task: '', due: defaultDue, hours: 0, _rowIndex: null });
-  renderTaskModalTable();
-  const body = document.getElementById('taskModalBody');
-  body.scrollTop = body.scrollHeight;
+  modaltasks.push({ assignee: '', project: '', task: '', due: defaultdue, hours: 0, status: '', notes: '', _rowindex: null });
+  rendertaskmodaltable();
+  const body = document.getelementbyid('taskmodalbody');
+  body.scrolltop = body.scrollheight;
 }
 
-async function saveTaskModal() {
+async function savetaskmodal() {
   try {
-    showLoading('Saving tasks...');
-    const viewMode = document.getElementById('filterView').value;
-    const otherTasks = STATE.tasks.filter(t => {
-      const d = parseDate(t.due);
+    showloading('saving tasks...');
+    const viewmode = document.getelementbyid('filterview').value;
+
+    const othertasks = state.tasks.filter(t => {
+      const d = parsedate(t.due);
       if (!d) return true;
       let key;
-      if (viewMode === 'month') {
-        key = dateToMonthKey(d);
+      if (viewmode === 'month') {
+        key = datetomonthkey(d);
       } else {
-        key = formatDate(getWeekStart(d));
+        key = formatdate(getweekstart(d));
       }
-      return key !== modalKey;
+      return key !== modalkey;
     });
 
-    const allTasks = [...otherTasks, ...modalTasks];
+    const alltasks = [...othertasks, ...modaltasks];
 
-    const res = await apiPost({
-      action: 'saveTasks',
-      tasks: allTasks.map(t => ({
+    const res = await apipost({
+      action: 'savetasks',
+      tasks: alltasks.map(t => ({
         assignee: t.assignee || '',
         project: t.project || '',
         task: t.task || '',
         due: t.due || '',
-        hours: parseFloat(t.hours) || 0
+        hours: parsefloat(t.hours) || 0,
+        status: t.status || '',
+        notes: t.notes || ''
       }))
     });
 
     if (res.success) {
-      const taskRes = await apiGet('getTasks');
-      if (taskRes.success) STATE.tasks = taskRes.tasks || [];
-      if (taskRes.success) {
-  STATE.tasks = (taskRes.tasks || []).map(t => {
-    delete t._sourceTab;
-    return t;
-  });
-}
-
-      hideLoading();
-      closeTaskModal();
-      buildFilters();
+      const taskres = await apiget('gettasks');
+      if (taskres.success) state.tasks = taskres.tasks || [];
+      if (taskres.success) {
+        state.tasks = (taskres.tasks || []).map(t => {
+          delete t._sourcetab;
+          return t;
+        });
+      }
+      hideloading();
+      closetaskmodal();
+      buildfilters();
       render();
-      showToast('Tasks saved!');
+      showtoast('tasks saved!');
     } else {
-      hideLoading();
-      showToast('Save failed: ' + (res.error || 'Unknown error'), 'error');
+      hideloading();
+      showtoast('save failed: ' + (res.error || 'unknown error'), 'error');
     }
   } catch (e) {
-    hideLoading();
-    showToast('Save failed — check console', 'error');
+    hideloading();
+    showtoast('save failed — check console', 'error');
     console.error(e);
   }
 }
 
 // ============================================================
-// TEAM MANAGEMENT MODAL
+// team management modal
 // ============================================================
-let modalTeam = [];
+let modalteam = [];
 
-function openTeamModal() {
-  modalTeam = STATE.team.map(m => ({ ...m }));
-  renderTeamModalBody();
-  document.getElementById('teamModal').classList.add('active');
+function openteammodal() {
+  modalteam = state.team.map(m => ({ ...m }));
+  renderteammodalbody();
+  document.getelementbyid('teammodal').classlist.add('active');
 }
 
-function closeTeamModal() {
-  document.getElementById('teamModal').classList.remove('active');
+function closeteammodal() {
+  document.getelementbyid('teammodal').classlist.remove('active');
 }
 
-function renderTeamModalBody() {
-  const body = document.getElementById('teamModalBody');
-  if (modalTeam.length === 0) {
-    body.innerHTML = '<div class="empty-state">No team members. Click "+ Add Member" below.</div>';
+function renderteammodalbody() {
+  const body = document.getelementbyid('teammodalbody');
+  if (modalteam.length === 0) {
+    body.innerhtml = '<div class="empty-state">no team members. click "+ add member" below.</div>';
     return;
   }
 
   let html = '';
-  modalTeam.forEach((m, i) => {
+  modalteam.foreach((m, i) => {
     html += `<div class="team-modal-row">
-      <input type="text" placeholder="Full Name" value="${esc(m.name || '')}" data-idx="${i}" data-field="name">
-      <input type="number" placeholder="Weekly Hours" value="${m.weeklyCapacity || 40}" data-idx="${i}" data-field="weeklyCapacity" min="1" max="168" style="max-width:100px">
-      <button class="delete-row-btn" data-idx="${i}" title="Remove">✕</button>
+      <input type="text" placeholder="full name" value="${esc(m.name || '')}" data-idx="${i}" data-field="name">
+      <input type="number" placeholder="weekly hours" value="${m.weeklycapacity || 40}" data-idx="${i}" data-field="weeklycapacity" min="1" max="168" style="max-width:100px">
+      <button class="delete-row-btn" data-idx="${i}" title="remove">✕</button>
     </div>`;
   });
+  body.innerhtml = html;
 
-  body.innerHTML = html;
-
-  body.querySelectorAll('input').forEach(el => {
-    el.addEventListener('change', () => {
-      const idx = parseInt(el.dataset.idx);
+  body.queryselectorall('input').foreach(el => {
+    el.addeventlistener('change', () => {
+      const idx = parseint(el.dataset.idx);
       const field = el.dataset.field;
       let val = el.value;
-      if (field === 'weeklyCapacity') val = parseFloat(val) || 40;
-      modalTeam[idx][field] = val;
+      if (field === 'weeklycapacity') val = parsefloat(val) || 40;
+      modalteam[idx][field] = val;
     });
   });
 
-  body.querySelectorAll('.delete-row-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      modalTeam.splice(parseInt(btn.dataset.idx), 1);
-      renderTeamModalBody();
+  body.queryselectorall('.delete-row-btn').foreach(btn => {
+    btn.addeventlistener('click', () => {
+      modalteam.splice(parseint(btn.dataset.idx), 1);
+      renderteammodalbody();
     });
   });
 }
 
-function addRowToTeamModal() {
-  modalTeam.push({ name: '', weeklyCapacity: 40 });
-  renderTeamModalBody();
+function addrowtoteammodal() {
+  modalteam.push({ name: '', weeklycapacity: 40 });
+  renderteammodalbody();
 }
 
-async function saveTeamModal() {
-  const valid = modalTeam.filter(m => m.name && m.name.trim());
-  if (valid.length === 0 && modalTeam.length > 0) {
-    showToast('Please enter at least one name', 'error');
+async function saveteammodal() {
+  const valid = modalteam.filter(m => m.name && m.name.trim());
+  if (valid.length === 0 && modalteam.length > 0) {
+    showtoast('please enter at least one name', 'error');
     return;
   }
-
   try {
-    showLoading('Saving team...');
-    const res = await apiPost({ action: 'saveTeam', team: valid });
+    showloading('saving team...');
+    const res = await apipost({ action: 'saveteam', team: valid });
     if (res.success) {
-      STATE.team = valid;
-      hideLoading();
-      closeTeamModal();
-      buildFilters();
+      state.team = valid;
+      hideloading();
+      closeteammodal();
+      buildfilters();
       render();
-      showToast('Team saved!');
+      showtoast('team saved!');
     } else {
-      hideLoading();
-      showToast('Save failed', 'error');
+      hideloading();
+      showtoast('save failed', 'error');
     }
   } catch (e) {
-    hideLoading();
-    showToast('Save failed — check console', 'error');
+    hideloading();
+    showtoast('save failed — check console', 'error');
     console.error(e);
   }
 }
 
 // ============================================================
-// CSV IMPORT / EXPORT
+// csv import / export
 // ============================================================
-async function importCsv(e) {
+async function importcsv(e) {
   const file = e.target.files[0];
   if (!file) return;
   const text = await file.text();
   const lines = text.split(/\r?\n/).filter(l => l.trim());
-  if (lines.length < 2) { showToast('CSV is empty', 'error'); return; }
+  if (lines.length < 2) { showtoast('csv is empty', 'error'); return; }
 
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+  const headers = lines[0].split(',').map(h => h.trim().tolowercase());
   const reqd = ['assignee', 'project', 'task', 'due', 'hours'];
   const missing = reqd.filter(r => !headers.includes(r));
-  if (missing.length) {
-    showToast(`CSV missing headers: ${missing.join(', ')}`, 'error');
-    return;
-  }
+  if (missing.length) { showtoast(`csv missing headers: ${missing.join(', ')}`, 'error'); return; }
 
   const tasks = [];
   for (let i = 1; i < lines.length; i++) {
-    const vals = parseCsvLine(lines[i]);
+    const vals = parsecsvline(lines[i]);
     if (vals.length < headers.length) continue;
     const obj = {};
-    headers.forEach((h, j) => obj[h] = vals[j] ? vals[j].trim() : '');
+    headers.foreach((h, j) => obj[h] = vals[j] ? vals[j].trim() : '');
     if (obj.assignee || obj.task) {
       if (obj.due && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(obj.due)) {
         const parts = obj.due.split('/');
-        obj.due = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+        obj.due = `${parts[2]}-${parts[0].padstart(2,'0')}-${parts[1].padstart(2,'0')}`;
       }
-      obj.hours = parseFloat(obj.hours) || 0;
+      obj.hours = parsefloat(obj.hours) || 0;
       tasks.push(obj);
     }
   }
 
-  if (tasks.length === 0) { showToast('No valid rows found', 'error'); return; }
+  if (tasks.length === 0) { showtoast('no valid rows found', 'error'); return; }
 
   try {
-    showLoading(`Importing ${tasks.length} tasks...`);
-    const res = await apiPost({ action: 'bulkImport', tasks: tasks });
+    showloading(`importing ${tasks.length} tasks...`);
+    const res = await apipost({ action: 'bulkimport', tasks: tasks });
     if (res.success) {
-      const taskRes = await apiGet('getTasks');
-      if (taskRes.success) STATE.tasks = taskRes.tasks || [];
-      if (taskRes.success) {
-  STATE.tasks = (taskRes.tasks || []).map(t => {
-    delete t._sourceTab;
-    return t;
-  });
-}
-
-      hideLoading();
-      buildFilters();
+      const taskres = await apiget('gettasks');
+      if (taskres.success) state.tasks = taskres.tasks || [];
+      if (taskres.success) {
+        state.tasks = (taskres.tasks || []).map(t => {
+          delete t._sourcetab;
+          return t;
+        });
+      }
+      hideloading();
+      buildfilters();
       render();
-      showToast(`Imported ${tasks.length} tasks!`);
+      showtoast(`imported ${tasks.length} tasks!`);
     } else {
-      hideLoading();
-      showToast('Import failed', 'error');
+      hideloading();
+      showtoast('import failed', 'error');
     }
   } catch (err) {
-    hideLoading();
-    showToast('Import failed — check console', 'error');
+    hideloading();
+    showtoast('import failed — check console', 'error');
     console.error(err);
   }
   e.target.value = '';
 }
 
-function parseCsvLine(line) {
+function parsecsvline(line) {
   const result = [];
   let current = '';
-  let inQuotes = false;
+  let inquotes = false;
   for (let i = 0; i < line.length; i++) {
     const ch = line[i];
-    if (inQuotes) {
+    if (inquotes) {
       if (ch === '"' && line[i+1] === '"') { current += '"'; i++; }
-      else if (ch === '"') { inQuotes = false; }
+      else if (ch === '"') { inquotes = false; }
       else { current += ch; }
     } else {
-      if (ch === '"') { inQuotes = true; }
+      if (ch === '"') { inquotes = true; }
       else if (ch === ',') { result.push(current); current = ''; }
       else { current += ch; }
     }
@@ -1305,47 +1141,45 @@ function parseCsvLine(line) {
   return result;
 }
 
-function exportCsv() {
-  const personFilter = document.getElementById('filterPerson').value;
-  const monthFilter = document.getElementById('filterMonth').value;
-  const projectFilter = document.getElementById('filterProject').value;
-  const search = document.getElementById('searchBox').value.toLowerCase().trim();
+function exportcsv() {
+  const personfilter = document.getelementbyid('filterperson').value;
+  const monthfilter = document.getelementbyid('filtermonth').value;
+  const projectfilter = document.getelementbyid('filterproject').value;
+  const search = document.getelementbyid('searchbox').value.tolowercase().trim();
 
-  let tasks = STATE.tasks.filter(t => {
-    const d = parseDate(t.due);
+  let tasks = state.tasks.filter(t => {
+    const d = parsedate(t.due);
     if (!d) return false;
-    if (personFilter && t.assignee !== personFilter) return false;
-    if (monthFilter && dateToMonthKey(d) !== monthFilter) return false;
-    if (projectFilter && t.project !== projectFilter) return false;
+    if (personfilter && t.assignee !== personfilter) return false;
+    if (monthfilter && datetomonthkey(d) !== monthfilter) return false;
+    if (projectfilter && t.project !== projectfilter) return false;
     if (search) {
-      const hay = `${t.assignee} ${t.project} ${t.task}`.toLowerCase();
+      const hay = `${t.assignee} ${t.project} ${t.task}`.tolowercase();
       if (!hay.includes(search)) return false;
     }
     return true;
   });
 
-  let csv = 'Assignee,Project,Task,Due,Hours\n';
-  tasks.forEach(t => {
-    csv += [t.assignee, t.project, t.task, t.due, t.hours].map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',') + '\n';
+  let csv = 'assignee,project,task,due,hours,status,notes\n';
+  tasks.foreach(t => {
+    csv += [t.assignee, t.project, t.task, t.due, t.hours, t.status, t.notes].map(v => `"${string(v || '').replace(/"/g, '""')}"`).join(',') + '\n';
   });
 
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `bandwidth_export_${new Date().toISOString().slice(0,10)}.csv`;
+  const blob = new blob([csv], { type: 'text/csv' });
+  const a = document.createelement('a');
+  a.href = url.createobjecturl(blob);
+  a.download = `bandwidth_export_${new date().toisostring().slice(0,10)}.csv`;
   a.click();
 }
 
 // ============================================================
-// UTILITY
+// utility
 // ============================================================
 function esc(str) {
   if (!str) return '';
-  const d = document.createElement('div');
-  d.textContent = String(str);
-  return d.innerHTML;
+  const d = document.createelement('div');
+  d.textcontent = string(str);
+  return d.innerhtml;
 }
-
 </script>
 </body>
-</html>
